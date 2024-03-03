@@ -37,7 +37,7 @@
             const tracker = new tracking.ColorTracker(['yellow', 'magenta', 'cyan']);
             
             // Start tracking
-            tracking.track('#video', tracker, { camera: true });
+            tracking.track(video, tracker, { camera: true });
             
             // Add event listener for tracking
             tracker.on('track', function(event) {
