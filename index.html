@@ -28,32 +28,41 @@
             video.setAttribute('width', 640);
             video.setAttribute('height', 480);
             video.setAttribute('autoplay', true);
-            video.style.display = 'none'; // Hide the video element
             
             // Append video element to video container
             videoContainer.appendChild(video);
             
-            // Initialize tracker
-            const tracker = new tracking.ColorTracker(['yellow', 'magenta', 'cyan']);
-            
-            // Start tracking
-            tracking.track(video, tracker, { camera: true });
-            
-            // Add event listener for tracking
-            tracker.on('track', function(event) {
-                if (event.data.length === 0) {
-                    // No objects tracked
-                    // Perform action when no hands are detected
-                } else {
-                    event.data.forEach(function(rect) {
-                        // Rect.x, rect.y, rect.width, rect.height contain hand bounding box
-                        // Use this information for hand tracking or other actions
-                        
-                        // Example: Log hand position
-                        console.log('Hand position:', rect.x, rect.y);
+            // Access webcam stream
+            navigator.mediaDevices.getUserMedia({ video: true })
+                .then(function(stream) {
+                    // Attach webcam stream to video element
+                    video.srcObject = stream;
+                    
+                    // Initialize tracker
+                    const tracker = new tracking.ColorTracker(['yellow', 'magenta', 'cyan']);
+                    
+                    // Start tracking
+                    tracking.track(video, tracker, { camera: true });
+                    
+                    // Add event listener for tracking
+                    tracker.on('track', function(event) {
+                        if (event.data.length === 0) {
+                            // No objects tracked
+                            // Perform action when no hands are detected
+                        } else {
+                            event.data.forEach(function(rect) {
+                                // Rect.x, rect.y, rect.width, rect.height contain hand bounding box
+                                // Use this information for hand tracking or other actions
+                                
+                                // Example: Log hand position
+                                console.log('Hand position:', rect.x, rect.y);
+                            });
+                        }
                     });
-                }
-            });
+                })
+                .catch(function(error) {
+                    console.error('Error accessing webcam:', error);
+                });
         });
     </script>
 </body>
